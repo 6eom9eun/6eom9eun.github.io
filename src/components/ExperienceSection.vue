@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue'
+import type { ComponentPublicInstance } from 'vue'
 import { usePortfolio } from '@/composables/usePortfolio'
 
 const { workExperience } = usePortfolio()
@@ -36,8 +37,8 @@ const toggleProject = async (projectTitle: string) => {
 }
 
 const setProjectRef = (projectTitle: string) => {
-  return (el: HTMLElement | null) => {
-    if (el) {
+  return (el: Element | ComponentPublicInstance | null) => {
+    if (el && el instanceof HTMLElement) {
       projectRefs.value[projectTitle] = el
     }
   }
