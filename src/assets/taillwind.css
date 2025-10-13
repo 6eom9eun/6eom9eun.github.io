@@ -1,0 +1,18 @@
+@import 'tailwindcss';
+
+/* (옵션) 글래스가 살아 보이게 배경 그라데이션도 같이 넣기 */
+:root {
+  --app-bg:
+    radial-gradient(60% 60% at 20% 20%, #7c3aed33, transparent 60%),
+    radial-gradient(50% 50% at 80% 30%, #06b6d433, transparent 60%),
+    radial-gradient(40% 40% at 50% 80%, #22c55e33, transparent 60%), #0b1220;
+}
+html,
+body,
+#app {
+  height: 100%;
+}
+body {
+  background: var(--app-bg);
+  background-attachment: fixed;
+}

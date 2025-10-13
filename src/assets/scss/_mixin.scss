@@ -1,0 +1,158 @@
+// 가운데 정렬
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// 양쪽 정렬
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// 중앙 정렬
+@mixin position-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// 상단 고정
+@mixin position-fixed {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+// Glass morphism effect
+@mixin glass-morphism($bg: var(--glass-bg), $border: var(--glass-border), $blur: var(--backdrop-blur)) {
+  background: $bg;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid $border;
+  box-shadow: 0 8px 32px var(--glass-shadow);
+}
+
+// Card with glass effect
+@mixin glass-card($radius: 16px, $padding: 2rem) {
+  @include glass-morphism();
+  border-radius: $radius;
+  padding: $padding;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--gradient-glass);
+  }
+
+  &:hover {
+    background: var(--surface-hover);
+    transform: translateY(-2px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+// Smooth animations
+@mixin smooth-transition($property: all, $duration: 0.3s, $timing: cubic-bezier(0.4, 0, 0.2, 1)) {
+  transition: $property $duration $timing;
+}
+
+// Gradient text
+@mixin gradient-text($gradient: var(--gradient-primary)) {
+  background: $gradient;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// Modern button
+@mixin modern-button($padding: 0.75rem 1.5rem, $radius: 12px) {
+  @include glass-card($radius, $padding);
+  @include smooth-transition();
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  text-decoration: none;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px var(--glass-shadow);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Responsive breakpoints
+@mixin mobile {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: 769px) and (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 1025px) {
+    @content;
+  }
+}
+
+// Container with max-width
+@mixin container($max-width: 1200px, $padding: 2rem) {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 0 $padding;
+
+  @include mobile {
+    padding: 0 1rem;
+  }
+}
+
+// Fade in animation
+@mixin fade-in($duration: 0.6s, $delay: 0s) {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp $duration ease-out $delay forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Floating animation
+@mixin floating($duration: 3s) {
+  animation: floating $duration ease-in-out infinite;
+}
+
+@keyframes floating {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
