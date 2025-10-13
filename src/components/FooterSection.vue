@@ -102,9 +102,8 @@ const quickLinks = [
               © {{ currentYear }} {{ profile.nameKorean }}. All rights reserved.
             </p>
           </div>
-          <div class="bottom__right">
-            <p class="made-with">Vue.js & TypeScript</p>
-          </div>
+
+          <div class="bottom__right"></div>
         </div>
       </div>
     </div>
