@@ -118,7 +118,7 @@ const workExperience = ref<WorkExperience[]>([
         highlights: [
           'KMS 본문 및 첨부파일 데이터 임베딩 파이프라인 구축',
           'BE&FE 개발(챗봇 채팅 조회, 임베딩 관리) 업무 담당',
-          '프로젝트 완수 후 시연 및 기능 설명을 타팀에 공유하여 사내 전파 이끔',
+          ,
           'AI 솔루션 강조로 수주 경쟁력 확보 및 신규 계약(2건) 유치에 기여',
         ],
       },
@@ -131,7 +131,6 @@ const workExperience = ref<WorkExperience[]>([
         highlights: [
           'KMS 데이터를 활용한 RAG 기반 상담사 추천 응답 생성 기능 개발',
           'BE/FE 통합 개발 (Spring Boot + Thymeleaf)',
-          '프로젝트 완수 후 시연 및 기능 설명을 타팀에 공유하여 사내 전파 이끔',
           'AI 솔루션 강조로 수주 경쟁력 확보 및 신규 계약(2건) 유치에 기여',
         ],
       },
