@@ -118,7 +118,6 @@ const workExperience = ref<WorkExperience[]>([
         highlights: [
           'KMS 본문 및 첨부파일 데이터 임베딩 파이프라인 구축',
           'BE&FE 개발(챗봇 채팅 조회, 임베딩 관리) 업무 담당',
-          ,
           'AI 솔루션 강조로 수주 경쟁력 확보 및 신규 계약(2건) 유치에 기여',
         ],
       },
