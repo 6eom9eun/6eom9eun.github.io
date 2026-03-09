@@ -279,10 +279,38 @@ onMounted(() => {
 }
 
 .visual__card {
-  @include mixin.glass-card(16px, 1.5rem);
+  @include mixin.glass-morphism-deep();
+  border-radius: 20px;
+  padding: 1.5rem;
   background: var(--surface);
   max-width: 400px;
   margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  @include mixin.hover-glow(var(--glow-secondary));
+
+  // 상단 하이라이트
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    z-index: 1;
+  }
+
+  // 외부 glow 링
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 22px;
+    background: var(--gradient-border);
+    z-index: -1;
+    opacity: 0.6;
+  }
 
   .card__header {
     display: flex;
@@ -361,19 +389,30 @@ onMounted(() => {
   &--primary {
     background: var(--gradient-primary);
     color: var(--text-inverse);
+    border: none;
+    box-shadow: 0 4px 20px var(--glow-primary);
 
     .btn__icon {
       width: 18px;
       height: 18px;
     }
+
+    &:hover {
+      box-shadow: 0 6px 30px var(--glow-secondary), 0 2px 8px rgba(0,0,0,0.2);
+      transform: translateY(-3px);
+    }
   }
 
   &--secondary {
-    background: var(--surface);
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--backdrop-blur));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur));
     color: var(--text-primary);
+    border: 1px solid var(--glass-border-strong);
 
     &:hover {
       background: var(--surface-hover);
+      box-shadow: 0 4px 20px var(--glass-shadow);
     }
   }
 }

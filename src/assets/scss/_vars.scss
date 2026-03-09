@@ -25,15 +25,28 @@
 
   // Glass morphism effects
   --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-bg-subtle: rgba(255, 255, 255, 0.05);
+  --glass-bg-strong: rgba(255, 255, 255, 0.18);
   --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-border-strong: rgba(255, 255, 255, 0.4);
   --glass-shadow: rgba(31, 38, 135, 0.37);
+  --glass-shadow-strong: rgba(31, 38, 135, 0.6);
   --backdrop-blur: 20px;
+  --backdrop-blur-sm: 10px;
+  --backdrop-blur-lg: 40px;
+
+  // Glow effects
+  --glow-primary: rgba(59, 130, 246, 0.4);
+  --glow-secondary: rgba(139, 92, 246, 0.4);
+  --glow-tertiary: rgba(6, 182, 212, 0.4);
+  --glow-success: rgba(16, 185, 129, 0.4);
 
   // Gradients
   --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   --gradient-tertiary: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.0));
+  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.0));
+  --gradient-border: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.05), rgba(139,92,246,0.3));
 
   // Legacy colors for compatibility
   --mainBg-color: var(--bg-primary);
@@ -71,9 +84,19 @@
   --text-tertiary: #94a3b8;
   --text-inverse: #1e293b;
 
-  --glass-bg: rgba(30, 41, 59, 0.1);
-  --glass-border: rgba(148, 163, 184, 0.2);
-  --glass-shadow: rgba(0, 0, 0, 0.37);
+  --glass-bg: rgba(30, 41, 59, 0.15);
+  --glass-bg-subtle: rgba(30, 41, 59, 0.08);
+  --glass-bg-strong: rgba(30, 41, 59, 0.3);
+  --glass-border: rgba(148, 163, 184, 0.15);
+  --glass-border-strong: rgba(148, 163, 184, 0.3);
+  --glass-shadow: rgba(0, 0, 0, 0.5);
+  --glass-shadow-strong: rgba(0, 0, 0, 0.7);
+  --glow-primary: rgba(59, 130, 246, 0.25);
+  --glow-secondary: rgba(139, 92, 246, 0.25);
+  --glow-tertiary: rgba(6, 182, 212, 0.25);
+  --glow-success: rgba(16, 185, 129, 0.25);
+  --gradient-glass: linear-gradient(135deg, rgba(148, 163, 184, 0.1), rgba(148, 163, 184, 0.0));
+  --gradient-border: linear-gradient(135deg, rgba(148,163,184,0.3), rgba(148,163,184,0.05), rgba(139,92,246,0.2));
 
   --mainBg-color: var(--bg-primary);
 }
@@ -93,37 +116,41 @@ body {
     width: 100%;
     height: 100%;
     background:
-      radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 40% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+      radial-gradient(ellipse 60% 50% at 15% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 85% 15%, rgba(139, 92, 246, 0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 55% 45% at 35% 85%, rgba(6, 182, 212, 0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 50% at 70% 70%, rgba(16, 185, 129, 0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 45% 40% at 55% 30%, rgba(245, 158, 11, 0.06) 0%, transparent 60%);
     pointer-events: none;
     z-index: -1;
-    animation: gradientShift 20s ease-in-out infinite;
+    animation: meshShift 25s ease-in-out infinite;
   }
 }
 
-@keyframes gradientShift {
+@keyframes meshShift {
   0%, 100% {
-    transform: translateX(0) translateY(0);
-    opacity: 0.5;
+    opacity: 0.7;
+    transform: scale(1) rotate(0deg);
   }
   25% {
-    transform: translateX(-20px) translateY(-20px);
-    opacity: 0.8;
+    opacity: 1;
+    transform: scale(1.05) rotate(1deg);
   }
   50% {
-    transform: translateX(20px) translateY(20px);
-    opacity: 0.3;
+    opacity: 0.5;
+    transform: scale(0.98) rotate(-1deg);
   }
   75% {
-    transform: translateX(-10px) translateY(10px);
-    opacity: 0.6;
+    opacity: 0.9;
+    transform: scale(1.02) rotate(0.5deg);
   }
 }
 
 :root.dark body::before {
   background:
-    radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(6, 182, 212, 0.05) 0%, transparent 50%);
+    radial-gradient(ellipse 60% 50% at 15% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 85% 15%, rgba(139, 92, 246, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 45% at 35% 85%, rgba(6, 182, 212, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 70% 70%, rgba(16, 185, 129, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 40% at 55% 30%, rgba(245, 158, 11, 0.04) 0%, transparent 60%);
 }

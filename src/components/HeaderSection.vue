@@ -1,32 +1,51 @@
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useTheme } from '@/composables/useTheme'
 
 const { isDark, toggleTheme } = useTheme()
 
+const scrollProgress = ref(0)
+const activeSection = ref('intro')
+const isScrolled = ref(false)
+
+const sections = ['intro', 'skills', 'experience', 'history', 'contact']
+
+const updateScroll = () => {
+  const scrollTop = window.scrollY
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight
+  scrollProgress.value = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0
+  isScrolled.value = scrollTop > 20
+
+  // 현재 활성 섹션 감지
+  for (const id of [...sections].reverse()) {
+    const el = document.getElementById(id)
+    if (el && scrollTop >= el.offsetTop - 120) {
+      activeSection.value = id
+      break
+    }
+  }
+}
+
+onMounted(() => window.addEventListener('scroll', updateScroll, { passive: true }))
+onUnmounted(() => window.removeEventListener('scroll', updateScroll))
+
 const smoothScrollTo = (targetId: string) => {
   const target = document.getElementById(targetId)
   if (target) {
-    const headerHeight = 80 // 헤더의 높이
+    const headerHeight = 80
     const targetPosition = target.offsetTop - headerHeight
     const currentPosition = window.pageYOffset
     const distance = targetPosition - currentPosition
-    const duration = Math.min(Math.abs(distance) / 2, 800) // 최대 800ms, 거리에 따라 조정
+    const duration = Math.min(Math.abs(distance) / 2, 800)
 
     let start: number | null = null
 
     const animateScroll = (timestamp: number) => {
       if (!start) start = timestamp
       const progress = Math.min((timestamp - start) / duration, 1)
-
-      // easeOutCubic 함수 적용
       const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
-      const easedProgress = easeOutCubic(progress)
-
-      window.scrollTo(0, currentPosition + distance * easedProgress)
-
-      if (progress < 1) {
-        requestAnimationFrame(animateScroll)
-      }
+      window.scrollTo(0, currentPosition + distance * easeOutCubic(progress))
+      if (progress < 1) requestAnimationFrame(animateScroll)
     }
 
     requestAnimationFrame(animateScroll)
@@ -40,7 +59,7 @@ const handleNavClick = (event: Event, targetId: string) => {
 </script>
 
 <template>
-  <header class="header">
+  <header class="header" :class="{ scrolled: isScrolled }">
     <div class="header__container">
       <div class="header__logo">
         <h1 class="logo__text">6eomDEV</h1>
@@ -48,24 +67,22 @@ const handleNavClick = (event: Event, targetId: string) => {
 
       <nav class="header__nav">
         <ul class="nav__list">
-          <li class="nav__item">
-            <a href="#intro" class="nav__link" @click="handleNavClick($event, 'intro')">소개</a>
-          </li>
-          <li class="nav__item">
-            <a href="#skills" class="nav__link" @click="handleNavClick($event, 'skills')">기술</a>
-          </li>
-          <li class="nav__item">
-            <a href="#experience" class="nav__link" @click="handleNavClick($event, 'experience')"
-              >경력</a
+          <li v-for="item in [
+            { id: 'intro', label: '소개' },
+            { id: 'skills', label: '기술' },
+            { id: 'experience', label: '경력' },
+            { id: 'history', label: '히스토리' },
+            { id: 'contact', label: '연락' },
+          ]" :key="item.id" class="nav__item">
+            <a
+              :href="`#${item.id}`"
+              class="nav__link"
+              :class="{ active: activeSection === item.id }"
+              @click="handleNavClick($event, item.id)"
             >
-          </li>
-          <li class="nav__item">
-            <a href="#history" class="nav__link" @click="handleNavClick($event, 'history')"
-              >히스토리</a
-            >
-          </li>
-          <li class="nav__item">
-            <a href="#contact" class="nav__link" @click="handleNavClick($event, 'contact')">연락</a>
+              {{ item.label }}
+              <span v-if="activeSection === item.id" class="nav__indicator"></span>
+            </a>
           </li>
         </ul>
       </nav>
@@ -97,6 +114,11 @@ const handleNavClick = (event: Event, targetId: string) => {
         </button>
       </div>
     </div>
+
+    <!-- 스크롤 진행 바 -->
+    <div class="header__progress">
+      <div class="progress__bar" :style="{ width: scrollProgress + '%' }"></div>
+    </div>
   </header>
 </template>
 
@@ -105,9 +127,26 @@ const handleNavClick = (event: Event, targetId: string) => {
 
 .header {
   @include mixin.position-fixed;
-  @include mixin.glass-morphism();
   z-index: 1000;
   padding: 1rem 0;
+  transition:
+    backdrop-filter 0.4s ease,
+    background 0.4s ease,
+    box-shadow 0.4s ease;
+  background: var(--glass-bg-subtle);
+  backdrop-filter: blur(var(--backdrop-blur-sm));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur-sm));
+  border-bottom: 1px solid transparent;
+
+  &.scrolled {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(var(--backdrop-blur-lg)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--backdrop-blur-lg)) saturate(180%);
+    border-bottom-color: var(--glass-border);
+    box-shadow:
+      0 4px 24px var(--glass-shadow),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+  }
 
   &__container {
     @include mixin.container();
@@ -120,13 +159,14 @@ const handleNavClick = (event: Event, targetId: string) => {
       font-size: 1.5rem;
       font-weight: 700;
       margin: 0;
+      letter-spacing: -0.02em;
     }
   }
 
   &__nav {
     .nav__list {
       @include mixin.flex-center;
-      gap: 2rem;
+      gap: 0.5rem;
       list-style: none;
       margin: 0;
       padding: 0;
@@ -138,15 +178,35 @@ const handleNavClick = (event: Event, targetId: string) => {
 
     .nav__link {
       @include mixin.smooth-transition();
+      position: relative;
       color: var(--text-secondary);
       text-decoration: none;
       font-weight: 500;
+      font-size: 0.9rem;
       padding: 0.5rem 1rem;
-      border-radius: 8px;
+      border-radius: 10px;
 
       &:hover {
-        color: var(--accent-primary);
+        color: var(--text-primary);
         background: var(--glass-bg);
+      }
+
+      &.active {
+        color: var(--accent-primary);
+        background: rgba(59, 130, 246, 0.08);
+      }
+
+      .nav__indicator {
+        position: absolute;
+        bottom: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: var(--accent-primary);
+        box-shadow: 0 0 6px var(--glow-primary);
+        animation: indicatorPulse 2s ease-in-out infinite;
       }
     }
   }
@@ -155,13 +215,30 @@ const handleNavClick = (event: Event, targetId: string) => {
     @include mixin.flex-center;
     gap: 1rem;
   }
+
+  &__progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--glass-bg);
+  }
+}
+
+.progress__bar {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2, #06b6d4);
+  border-radius: 0 2px 2px 0;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 8px var(--glow-primary);
 }
 
 .theme-toggle {
-  @include mixin.glass-card(12px, 0.75rem);
+  @include mixin.glass-morphism(var(--glass-bg), var(--glass-border), var(--backdrop-blur-sm));
+  border-radius: 12px;
+  padding: 0.6rem;
   @include mixin.smooth-transition();
-
-  background: var(--glass-bg);
   border: none;
   cursor: pointer;
   color: var(--text-primary);
@@ -169,11 +246,18 @@ const handleNavClick = (event: Event, targetId: string) => {
   .theme-icon {
     width: 20px;
     height: 20px;
+    display: block;
   }
 
   &:hover {
-    background: var(--surface-hover);
-    transform: translateY(-2px) rotate(10deg);
+    background: var(--glass-bg-strong);
+    box-shadow: 0 0 16px var(--glow-secondary), 0 4px 16px var(--glass-shadow);
+    transform: translateY(-1px) rotate(10deg);
   }
+}
+
+@keyframes indicatorPulse {
+  0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  50% { opacity: 0.6; transform: translateX(-50%) scale(1.5); }
 }
 </style>

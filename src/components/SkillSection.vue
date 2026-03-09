@@ -5,11 +5,18 @@ import { usePortfolio } from '@/composables/usePortfolio'
 const { skills } = usePortfolio()
 const sectionRef = ref<HTMLElement>()
 
-const getSkillColor = (level: number): string => {
-  if (level >= 85) return '#10b981' // green
-  if (level >= 70) return '#3b82f6' // blue
-  if (level >= 50) return '#f59e0b' // orange
-  return '#ef4444' // red
+const getSkillGradient = (level: number): string => {
+  if (level >= 85) return 'linear-gradient(90deg, #10b981, #06b6d4)'
+  if (level >= 70) return 'linear-gradient(90deg, #3b82f6, #8b5cf6)'
+  if (level >= 50) return 'linear-gradient(90deg, #f59e0b, #ef4444)'
+  return 'linear-gradient(90deg, #ef4444, #f97316)'
+}
+
+const getSkillGlow = (level: number): string => {
+  if (level >= 85) return 'rgba(16, 185, 129, 0.5)'
+  if (level >= 70) return 'rgba(59, 130, 246, 0.5)'
+  if (level >= 50) return 'rgba(245, 158, 11, 0.5)'
+  return 'rgba(239, 68, 68, 0.5)'
 }
 
 onMounted(() => {
@@ -72,7 +79,10 @@ onMounted(() => {
                   <div
                     class="skill__progress-fill"
                     :data-level="skill.level"
-                    :style="{ '--skill-color': getSkillColor(skill.level) }"
+                    :style="{
+                      '--skill-gradient': getSkillGradient(skill.level),
+                      '--skill-glow': getSkillGlow(skill.level),
+                    }"
                   ></div>
                 </div>
               </div>
@@ -150,9 +160,15 @@ onMounted(() => {
   @include mixin.glass-card();
   height: 100%;
   background: var(--surface);
+  @include mixin.smooth-transition();
 
   &:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
+    box-shadow:
+      0 0 24px var(--glow-primary),
+      0 16px 48px var(--glass-shadow-strong),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    border-color: var(--glass-border-strong);
   }
 }
 
@@ -200,10 +216,11 @@ onMounted(() => {
   .skill__progress-fill {
     height: 100%;
     width: 0;
-    background: var(--skill-color);
+    background: var(--skill-gradient);
     border-radius: 4px;
-    transition: width 1s ease-out;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
+    box-shadow: 0 0 8px var(--skill-glow);
 
     &::after {
       content: '';
@@ -211,8 +228,9 @@ onMounted(() => {
       top: 0;
       right: 0;
       bottom: 0;
-      width: 20px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
+      width: 30px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4));
+      border-radius: 4px;
       animation: shimmer 2s infinite;
     }
   }
