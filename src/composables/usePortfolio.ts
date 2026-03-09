@@ -90,10 +90,23 @@ const workExperience = ref<WorkExperience[]>([
     team: 'AICC솔루션개발팀 AICC데이터그룹',
     projects: [
       {
-        title: '개발팀 AI MCP 개발',
+        title: '게시판 AI Agent 봇 개발',
+        period: '2026. 03 ~ 진행 중',
+        description: 'LangGraph 기반 멀티노드 AI Agent 아키텍처 설계 및 Master 노드 영역 개발 담당',
+        techStack: ['FastAPI', 'LangGraph', 'FastMCP', 'Milvus DB', 'PostgreSQL'],
+        highlights: [
+          '텍스트 전처리 노드 개발: 정규식 기반 개인정보 마스킹(전화번호·주민번호·카드번호), HTML 태그 제거, 아호코라식(Aho-Corasick) 알고리즘 기반 고위험 키워드 다중 패턴 탐지 및 담당자 이관 처리',
+          '의도 분류 노드 개발: RAG Chain 기반 의도 분류(배송·조회·파손배상 등), 용어사전/동의어사전 매핑, 다중 의도 처리 및 Fallback 설계',
+          '이미지 분석 필요성 확인 노드 개발: 이미지 업로드 여부·사용자 설정·의도 분류 결과 기반 분석 필요성 판단',
+          '이미지 분석 노드 개발: Vision·OCR Tool Calling 형태로 구현, Image RAG 지원',
+          '실행 계획 설계 노드 개발: 의도별 허용 도구 목록 및 시나리오/Agent 모드 설정, 다중 의도 병렬 처리 계획 수립, system prompt 동적 생성',
+        ],
+      },
+      {
+        title: '개발팀 AI MCP 서버 개발',
         period: '2024. 08 ~ 2024. 10',
         description:
-          'FastAPI, LangGraph, FastMCP, Airflow, Spring Boot, Thymeleaf를 활용한 AI MCP 기반 도구 오케스트레이션 레이어 구축',
+          'FastAPI, LangGraph, FastMCP를 활용한 AI MCP 기반 도구 오케스트레이션 레이어 구축 및 다양한 MCP 툴 개발',
         techStack: [
           'FastAPI',
           'LangGraph',
@@ -107,6 +120,9 @@ const workExperience = ref<WorkExperience[]>([
         highlights: [
           'FastMCP 기반 도구 오케스트레이션 레이어(LangGraph) 표준화',
           'Airflow 기반 RAG 데이터 적재 파이프라인 구축',
+          'RDB 조회 툴 개발: PostgreSQL 자연어 쿼리 변환 및 데이터 조회 기능 구현',
+          'Word/PPT 문서 자동 생성 툴 개발: python-docx, python-pptx 활용 AI 기반 문서 자동화',
+          'GitLab 연동 툴 개발: 이슈·MR 조회·생성·코드 리뷰 등 GitLab API 기반 개발 워크플로우 자동화',
         ],
       },
       {
@@ -118,7 +134,6 @@ const workExperience = ref<WorkExperience[]>([
         highlights: [
           'KMS 본문 및 첨부파일 데이터 임베딩 파이프라인 구축',
           'BE&FE 개발(챗봇 채팅 조회, 임베딩 관리) 업무 담당',
-          'AI 솔루션 강조로 수주 경쟁력 확보 및 신규 계약(2건) 유치에 기여',
         ],
       },
       {
@@ -128,9 +143,10 @@ const workExperience = ref<WorkExperience[]>([
           '서비스 내 KMS(지식관리시스템) 데이터를 활용한 RAG 기반의 상담사 추천 응답 생성 기능 개발',
         techStack: ['FastAPI', 'LangChain', 'Spring Boot', 'Thymeleaf', 'PostgreSQL', 'Milvus DB'],
         highlights: [
-          'KMS 데이터를 활용한 RAG 기반 상담사 추천 응답 생성 기능 개발',
-          'BE/FE 통합 개발 (Spring Boot + Thymeleaf)',
-          'AI 솔루션 강조로 수주 경쟁력 확보 및 신규 계약(2건) 유치에 기여',
+          'RAG 파이프라인 구축: KMS 데이터 임베딩 및 벡터 검색 기반 컨텍스트 생성',
+          'SSE를 활용한 실시간 스트리밍 응답 구현으로 사용자 경험 개선',
+          '점진적 렌더링 구현 : JSON 응답 리스트(3개)를 개별 수신 즉시 UI 업데이트',
+          'Full-stack 개발: Spring Boot 백엔드 + Thymeleaf 프론트엔드 통합 구현',
         ],
       },
       {
